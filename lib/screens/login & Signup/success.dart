@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:gmr/models/bottomnav.dart';
 import 'package:gmr/models/shared_preferences.dart';
-import 'package:gmr/screens/home.dart';
 import 'package:gmr/screens/login%20&%20Signup/signup2.dart';
 
 class SuccessScreen extends StatefulWidget {
@@ -20,7 +20,7 @@ class _SuccessScreenState extends State<SuccessScreen> {
       print('The logstatus is $logStatus');
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
+        MaterialPageRoute(builder: (context) => Bottomnav()),
         (route) => false,
       );
     });

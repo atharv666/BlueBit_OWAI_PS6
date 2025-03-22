@@ -5,6 +5,22 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      body: Stack(
+        children: [
+          Positioned(
+            bottom: 10,
+            right: 10,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blueAccent
+              ),
+              child: Icon(Icons.camera, color: Colors.white,),
+              onPressed: (){},
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
