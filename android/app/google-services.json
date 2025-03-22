@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "134363104145",
+    "project_id": "gmrapp-4da95",
+    "storage_bucket": "gmrapp-4da95.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:134363104145:android:6808884583f854e1481030",
+        "android_client_info": {
+          "package_name": "com.example.gmr"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_HHIIKn52SxEGNV8fa1yAg_o1iALUr5o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
