@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gmr/screens/OCR.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -16,7 +17,11 @@ class HomePage extends StatelessWidget {
                 backgroundColor: Colors.blueAccent
               ),
               child: Icon(Icons.camera, color: Colors.white,),
-              onPressed: (){},
+              onPressed: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return Ocr();
+                },));
+              },
             ),
           ),
         ],
