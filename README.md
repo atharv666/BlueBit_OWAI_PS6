@@ -14,7 +14,7 @@ The AI-Powered Prescription Scanner and Generic Medicine Recommender is a Flutte
 
 ## 🛠️ Project Structure
 lib/
-├── models/
+├── models/<br>
 │   ├── bottom_nav_bar.dart        # Custom Bottom Navigation Bar Component<br>
 │   ├── shared_preferences.dart    # Local Storage Management<br>
 │   ├── medicine.dart              # Medicine Data Model<br>
