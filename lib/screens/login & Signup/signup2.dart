@@ -77,7 +77,7 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
   void addUser(Users user) async {
     final Uri url = Uri.https(
       "gmrapp-4da95-default-rtdb.firebaseio.com", "users.json"
-    ); // .json is required for Firebase API
+    );
 
     final response = await http.post(url,
         headers: {"Content-Type": "application/json"},
@@ -87,8 +87,8 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
           'last_name': user.lastName,
           'contact': user.contact,
           'location': user.location,
-        }) // Convert citizen to JSON
-        );
+        })
+    );
 
     if (response.statusCode == 200) {
       print("User added successfully: ${response.body}");
@@ -110,7 +110,7 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-        backgroundColor: const Color(0xFF2D7DD2),
+        backgroundColor: const Color(0xFFE3F2FD),
         body: Center(
           child: SingleChildScrollView(
             child: Column(
@@ -118,85 +118,93 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
               children: [
                 Card(
                   color: Colors.white,
+                  elevation: 8,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
                   margin: const EdgeInsets.all(20),
-                  child: SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Form(
-                        key: _form,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const SizedBox(height: 12),
-                            PinCodeTextField(
-                              appContext: context,
-                              length: 4, // OTP length
-                              validator: (value) {
-                                if (value == null || value.trim().length != 4) {
-                                  return 'Please enter a valid 4-digit OTP.';
-                                }
-                                return null;
-                              },
-                              onChanged: (value) {
-                                _otp = value; // Save the entered OTP
-                              },
-                              keyboardType: TextInputType.number,
-                              textStyle: const TextStyle(fontSize: 20),
-                              pinTheme: PinTheme(
-                                shape: PinCodeFieldShape.box,
-                                borderRadius: BorderRadius.circular(5),
-                                selectedColor: Colors.black,
-                                activeColor: const Color.fromARGB(255, 0, 0, 0),
-                                inactiveColor:
-                                    const Color.fromARGB(255, 50, 100, 150),
-                                fieldHeight: 50,
-                                fieldWidth: 40,
-                                activeFillColor: Colors.white,
-                              ),
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  child: Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Form(
+                      key: _form,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text(
+                            'Verify OTP',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF2D7DD2),
                             ),
-                            _isResendEnabled
-                                ? const Text("Didn't receive OTP?")
-                                : CountdownTimer(
-                                    endTime: _endTime,
-                                    widgetBuilder: (_, time) {
-                                      if (time == null) {
-                                        WidgetsBinding.instance
-                                            .addPostFrameCallback((_) {
-                                          setState(() {
-                                            _isResendEnabled = true;
-                                          });
+                          ),
+                          const SizedBox(height: 16),
+                          PinCodeTextField(
+                            appContext: context,
+                            length: 4, // OTP length
+                            validator: (value) {
+                              if (value == null || value.trim().length != 4) {
+                                return 'Please enter a valid 4-digit OTP.';
+                              }
+                              return null;
+                            },
+                            onChanged: (value) {
+                              _otp = value;
+                            },
+                            keyboardType: TextInputType.number,
+                            textStyle: const TextStyle(fontSize: 20),
+                            pinTheme: PinTheme(
+                              shape: PinCodeFieldShape.box,
+                              borderRadius: BorderRadius.circular(5),
+                              selectedColor: Colors.blueAccent,
+                              activeColor: Colors.green,
+                              inactiveColor: const Color(0xFF2D7DD2),
+                              fieldHeight: 50,
+                              fieldWidth: 40,
+                              activeFillColor: Colors.white,
+                            ),
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          ),
+                          _isResendEnabled
+                              ? const Text("Didn't receive OTP?")
+                              : CountdownTimer(
+                                  endTime: _endTime,
+                                  widgetBuilder: (_, time) {
+                                    if (time == null) {
+                                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                                        setState(() {
+                                          _isResendEnabled = true;
                                         });
-                                        return const Text("You can resend now");
-                                      }
-                                      return Text("Resend in ${time.sec} sec");
-                                    },
-                                  ),
-                            TextButton(
-                              onPressed: _isResendEnabled ? resendOTP : null,
-                              child: Text(
-                                "Resend OTP",
-                                style: TextStyle(
-                                  color: _isResendEnabled
-                                      ? Colors.blue
-                                      : Colors.grey,
-                                  fontWeight: FontWeight.bold,
+                                      });
+                                      return const Text("You can resend now");
+                                    }
+                                    return Text("Resend in ${time.sec} sec");
+                                  },
                                 ),
+                          TextButton(
+                            onPressed: _isResendEnabled ? resendOTP : null,
+                            child: Text(
+                              "Resend OTP",
+                              style: TextStyle(
+                                color: _isResendEnabled ? Colors.blue : Colors.grey,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                            ElevatedButton(
-                              onPressed: _submit,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    const Color.fromARGB(255, 50, 100, 150),
-                              ),
-                              child: const Text(
-                                'SignUp',
-                                style: TextStyle(color: Colors.white),
+                          ),
+                          ElevatedButton(
+                            onPressed: _submit,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.green,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
                               ),
                             ),
-                          ],
-                        ),
+                            child: const Text(
+                              'Sign Up',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
