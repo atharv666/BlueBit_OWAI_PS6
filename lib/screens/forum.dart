@@ -135,7 +135,7 @@ class CommunityForum extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showPostDialog(context),
         child: Icon(Icons.add, color: Colors.white),
-        backgroundColor: Colors.green[700],
+        backgroundColor: Colors.green,
       ),
     );
   }
@@ -184,7 +184,7 @@ class CommunityForum extends StatelessWidget {
                 addPost(titleController.text, descriptionController.text, context);
                 Navigator.pop(context);
               },
-              child: Text("Post", style: TextStyle(color: Colors.green[700])),
+              child: Text("Post", style: TextStyle(color: Colors.green)),
             ),
           ],
         );

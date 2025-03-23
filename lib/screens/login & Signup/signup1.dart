@@ -173,7 +173,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                           const SizedBox(height: 12),
                           TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                return LoginScreen();
+                              },));
+                            },
                             child: const Text('I already have an Account', style: TextStyle(color: Colors.blue)),
                           ),
                         ],
