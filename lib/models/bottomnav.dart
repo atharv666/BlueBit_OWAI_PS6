@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gmr/screens/forum.dart';
 import 'package:gmr/screens/home.dart';
 import 'package:gmr/screens/profile.dart';
 
@@ -33,12 +34,14 @@ class _BottomnavState extends State<Bottomnav> {
           controller: pageController,
           children: [
             HomePage(),
-            ProfileScreen()
+            CommunityForum(),
+            ProfileScreen(),
           ],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(items: const<BottomNavigationBarItem>[
         BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+        BottomNavigationBarItem(icon: Icon(Icons.chat), label: "Forum"),
         BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
       ],
       currentIndex: selectedindex,
