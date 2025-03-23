@@ -5,6 +5,7 @@ import 'package:email_otp/email_otp.dart';
 import 'package:flutter/material.dart';
 import 'package:gmr/models/shared_preferences.dart';
 import 'package:gmr/models/users.dart';
+import 'package:gmr/screens/login%20&%20Signup/success.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:http/http.dart' as http;
@@ -63,11 +64,11 @@ class _SignUpScreen2State extends State<SignUpScreen2> {
       await saveIDStatus(_enteredEmail);
       universalId = _enteredEmail;
       addUser(user);
-      // Navigator.of(context).push(
-      //   MaterialPageRoute(
-      //     builder: (ctx) => const SuccessScreen(),
-      //   ),
-      // );
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (ctx) => const SuccessScreen(),
+        ),
+      );
       return;
     }
     verifyEmailOTP(_enteredEmail, _otp);

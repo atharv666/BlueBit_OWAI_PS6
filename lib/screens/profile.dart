@@ -13,10 +13,9 @@ class ProfileScreen extends StatelessWidget {
     return '${email[0].toUpperCase()}${email[6].toUpperCase()}';
   }
 
-
   @override
   Widget build(BuildContext context) {
-    String shortform = createEmailShortForm(universalId);
+    String shortform = universalId != 'Sign Up/ Login to view details' ? createEmailShortForm(universalId) : '-';
 
     return Scaffold(
       appBar: AppBar(
@@ -46,9 +45,7 @@ class ProfileScreen extends StatelessWidget {
                   radius: 50.0,
                   backgroundColor: Colors.blue,
                   child: Text(
-                    (universalId != 'Sign Up/ Login to view details')
-                        ? shortform
-                        : '-',
+                    shortform,
                     style: const TextStyle(
                       fontSize: 32.0,
                       color: Colors.white,
@@ -60,17 +57,10 @@ class ProfileScreen extends StatelessWidget {
               const SizedBox(height: 16.0),
               Center(
                 child: Text(
-                  (universalId != 'Sign Up/ Login to view details')
-                      ? universalId
-                      : 'Sign Up/ Login to view details',
+                  universalId,
                   style: TextStyle(
-                    fontSize: (universalId != 'Sign Up/ Login to view details')
-                        ? 24.0
-                        : 16.0,
-                    fontWeight:
-                        (universalId != 'Sign Up/ Login to view details')
-                            ? FontWeight.bold
-                            : FontWeight.normal,
+                    fontSize: universalId != 'Sign Up/ Login to view details' ? 24.0 : 16.0,
+                    fontWeight: universalId != 'Sign Up/ Login to view details' ? FontWeight.bold : FontWeight.normal,
                   ),
                 ),
               ),
@@ -101,8 +91,7 @@ class ProfileScreen extends StatelessWidget {
                         builder: (context) => AlertDialog(
                           title: Text("Log Out?"),
                           content: Text(
-                              "You will be signed out of the application. Do you really want to log out?"
-                              ),
+                              "You will be signed out of the application. Do you really want to log out?"),
                           actions: [
                             TextButton(
                               onPressed: () => Navigator.of(context).pop(false),
@@ -119,10 +108,11 @@ class ProfileScreen extends StatelessWidget {
                       if (shouldExit == true) {
                         await saveLoginStatus(false);
                         await saveIDStatus('Sign Up/ Login to view details');
+                        universalId = 'Sign Up/ Login to view details';
+                        logStatus = false;
                         Navigator.pushAndRemoveUntil(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => SplashScreen()),
+                          MaterialPageRoute(builder: (context) => SplashScreen()),
                           (route) => false,
                         );
                       }
