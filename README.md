@@ -28,14 +28,14 @@ lib/
 └── main.dart                      # App Entry Point<br>
 
 ## 🧑‍💻 Installation & Setup
-**Follow these steps to set up the project locally**:
-https://github.com/atharv666/gmr.git
-**Follow these steps to set up the project locally**:
-cd gmr
-**Install Dependencies:**
-flutter pub get
-**Run the App:**
-flutter run
+**Follow these steps to set up the project locally**:<br>
+https://github.com/atharv666/gmr.git<br>
+**Navigate to Project Directory**:<br>
+cd gmr<br>
+**Install Dependencies:**<br>
+flutter pub get<br>
+**Run the App:**<br>
+flutter run<br>
 
 ## 🛎️ Requirements
 - **Flutter 3.10+**
