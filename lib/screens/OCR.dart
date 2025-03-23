@@ -21,13 +21,43 @@ class _OcrState extends State<Ocr> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Text Recognition"),
+        title: const Text("Text Recognition", style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),),
         centerTitle: true,
+        backgroundColor: Colors.blueAccent,
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
-      body: _buildUI(),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.blue.shade200, Colors.green.shade100],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: Column(
+          children: [
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text("📸 Selected Image", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.blueAccent)),
+            ),
+            Expanded(flex: 2, child: _imageView()),
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text("📝 Extracted Text", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.green)),
+            ),
+            Expanded(flex: 1, child: _extractTextView()),
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text("💊 Medicine Results", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.blueAccent)),
+            ),
+            Expanded(flex: 3, child: _medicineResultsView()),
+          ],
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: _pickImage,
-        child: Icon(Icons.add),
+        backgroundColor: Colors.green,
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }
@@ -48,81 +78,53 @@ class _OcrState extends State<Ocr> {
         });
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("No text found in the image")),
+          const SnackBar(content: Text("No text found in the image")),
         );
       }
     }
   }
 
-  Widget _buildUI() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        _imageView(),
-        Divider(color: Colors.blueAccent),
-        _extractTextView(),
-        Divider(color: Colors.blueAccent),
-        Expanded(child: _medicineResultsView()),
-      ],
-    );
-  }
-
   Widget _imageView() {
     return selectedMedia == null
-        ? Center(child: Text("Pick an Image"))
-        : Center(child: Image.file(selectedMedia!, width: 200));
+        ? const Center(
+            child: Text("Pick an Image", style: TextStyle(fontSize: 20, color: Colors.blueAccent)),
+          )
+        : Center(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20.0),
+              child: Image.file(selectedMedia!, width: 300, height: 300, fit: BoxFit.cover),
+            ),
+          );
   }
 
   Widget _extractTextView() {
-    return Expanded(
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+      margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16.0),
+        boxShadow: [
+          BoxShadow(color: Colors.blue.withOpacity(0.1), blurRadius: 12, offset: const Offset(0, 4))
+        ],
+      ),
       child: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
-        child: Text(extractedText ?? "No Extracted Text", style: TextStyle(fontSize: 25)),
+        child: Text(
+          extractedText ?? "No Extracted Text",
+          style: const TextStyle(fontSize: 18, color: Colors.black87),
+        ),
       ),
     );
   }
 
-  // Widget _medicineResultsView() {
-  //   return FutureBuilder<List<Map<String, dynamic>>>(
-  //     future: medicineDataFuture,
-  //     builder: (context, snapshot) {
-  //       if (snapshot.connectionState == ConnectionState.waiting) {
-  //         return Center(child: CircularProgressIndicator());
-  //       } else if (snapshot.hasError || snapshot.data == null || snapshot.data!.isEmpty) {
-  //         return Center(child: Text('Failed to fetch data or no medicine details available.'));
-  //       }
-
-  //       final medicines = snapshot.data!;
-  //       return ListView.builder(
-  //         itemCount: medicines.length,
-  //         itemBuilder: (context, index) {
-  //           final medicine = medicines[index];
-  //           return Card(
-  //             margin: EdgeInsets.all(8.0),
-  //             child: ExpansionTile(
-  //               title: Text(medicine['Title']?.toString() ?? 'Unknown Medicine'),
-  //               subtitle: Text(medicine['Description']?.toString() ?? 'No information available'),
-  //               children: [
-  //                 ListTile(
-  //                   title: Text("Manufacturer: ${medicine['Manufacturer']?.toString() ?? 'Unknown'}"),
-  //                   subtitle: Text("Composition: ${medicine['Composition']?.toString() ?? 'Unknown'} | Price: ${medicine['Price']?.toString() ?? 'Unknown'}"),
-  //                 ),
-  //               ],
-  //             ),
-  //           );
-  //         },
-  //       );
-  //     },
-  //   );
-  // }
   Widget _medicineResultsView() {
     return FutureBuilder<List<Map<String, dynamic>>>(
       future: medicineDataFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError || snapshot.data == null || snapshot.data!.isEmpty) {
-          return Center(child: Text('Failed to fetch data or no medicine details available.'));
+          return const Center(child: Text('Failed to fetch data or no medicine details available.'));
         }
 
         final medicines = snapshot.data!;
@@ -133,14 +135,22 @@ class _OcrState extends State<Ocr> {
             final alternatives = (medicine['Alternatives'] as List?) ?? [];
 
             return Card(
-              margin: EdgeInsets.all(8.0),
+              color: Colors.white,
+              elevation: 6,
+              margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
               child: ExpansionTile(
-                title: Text(medicine['Title']?.toString() ?? 'Unknown Medicine'),
+                tilePadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                title: Text(
+                  medicine['Title']?.toString() ?? 'Unknown Medicine',
+                  style: const TextStyle(color: Colors.blueAccent, fontWeight: FontWeight.bold),
+                ),
                 subtitle: Text(medicine['Description']?.toString() ?? 'No information available'),
                 children: [
                   ListTile(
                     title: Text("Manufacturer: ${medicine['Manufacturer']?.toString() ?? 'Unknown'}"),
-                    subtitle: Text("Composition: ${medicine['Composition']?.toString() ?? 'Unknown'} | Price: ${medicine['Price']?.toString() ?? 'Unknown'}"),
+                    subtitle: Text(
+                        "Composition: ${medicine['Composition']?.toString() ?? 'Unknown'} | Price: ${medicine['Price']?.toString() ?? 'Unknown'}"),
                   ),
                   if (alternatives.isNotEmpty)
                     Column(
@@ -152,7 +162,7 @@ class _OcrState extends State<Ocr> {
                       }).toList(),
                     )
                   else
-                    ListTile(title: Text("No Alternatives Available"))
+                    const ListTile(title: Text("No Alternatives Available"))
                 ],
               ),
             );
