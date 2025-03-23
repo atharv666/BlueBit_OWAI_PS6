@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:gmr/services/getmedicine.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -37,7 +36,7 @@ class _OcrState extends State<Ocr> {
             if (text != null && text.isNotEmpty) {
               setState(() {
                 extractedText = text;
-                medicineDataFuture = getMedicineInfoFromDeepSeek(extractedText!);
+                // medicineDataFuture = getMedicineInfoFromDeepSeek(extractedText!);
               });
             } else {
               ScaffoldMessenger.of(context).showSnackBar(
