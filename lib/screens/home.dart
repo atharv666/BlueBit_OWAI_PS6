@@ -105,7 +105,7 @@ class _HomePageState extends State<HomePage> {
             right: 20,
             bottom: 80,
             child: AnimatedContainer(
-              duration: Duration(milliseconds: 300),
+              duration: Duration(milliseconds: 500),
               width: isForumExpanded ? 180 : 56,
               child: FloatingActionButton.extended(
                 onPressed: () {
