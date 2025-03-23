@@ -12,22 +12,22 @@ The AI-Powered Prescription Scanner and Generic Medicine Recommender is a Flutte
 - **Community Forum**: A forum where users can engage with others regarding healthcare, medicine, and prescriptions.
 - **Splash Screen**: A welcome screen that introduces the app to users.
 
-##🛠️ Project Structure
+## 🛠️ Project Structure
 lib/
 ├── models/
-│   ├── bottom_nav_bar.dart        # Custom Bottom Navigation Bar Component
-│   ├── shared_preferences.dart    # Local Storage Management
-│   ├── medicine.dart              # Medicine Data Model
-├── screens/
-│   ├── login_signup/              # Login and Signup Screens
-│   ├── home.dart                  # Home Page
-│   ├── ocr.dart                   # OCR Scanning Screen
-│   ├── profile.dart               # Profile Management
-│   ├── forum.dart                 # Community Discussion Forum
-│   ├── splash.dart                # Splash Screen
-└── main.dart                      # App Entry Point
+│   ├── bottom_nav_bar.dart        # Custom Bottom Navigation Bar Component<br>
+│   ├── shared_preferences.dart    # Local Storage Management<br>
+│   ├── medicine.dart              # Medicine Data Model<br>
+├── screens/<br>
+│   ├── login_signup/              # Login and Signup Screens<br>
+│   ├── home.dart                  # Home Page<br>
+│   ├── ocr.dart                   # OCR Scanning Screen<br>
+│   ├── profile.dart               # Profile Management<br>
+│   ├── forum.dart                 # Community Discussion Forum<br>
+│   ├── splash.dart                # Splash Screen<br>
+└── main.dart                      # App Entry Point<br>
 
-##🧑‍💻 Installation & Setup
+## 🧑‍💻 Installation & Setup
 **Follow these steps to set up the project locally**:
 https://github.com/atharv666/gmr.git
 **Follow these steps to set up the project locally**:
@@ -37,7 +37,7 @@ flutter pub get
 **Run the App:**
 flutter run
 
-##🛎️ Requirements
+## 🛎️ Requirements
 - **Flutter 3.10+**
 - **Dart 3.0+**
 - **Android Studio or Visual Studio Code**
