@@ -23,12 +23,12 @@ void _showLoginAlert(BuildContext context, String message) {
   showDialog(
     context: context,
     builder: (context) => AlertDialog(
-      title: Text("Access Denied"),
-      content: Text(message),
+      title: Text("Access Denied", style: TextStyle(color: Colors.blue[800])),
+      content: Text(message, style: TextStyle(color: Colors.blue[900])),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: Text("Cancel"),
+          child: Text("Cancel", style: TextStyle(color: Colors.red)),
         ),
         TextButton(
           onPressed: () {
@@ -37,7 +37,7 @@ void _showLoginAlert(BuildContext context, String message) {
               MaterialPageRoute(builder: (ctx) => const LoginScreen()), // Navigates to Login
             );
           },
-          child: Text("Login"),
+          child: Text("Login", style: TextStyle(color: Colors.green[700])),
         ),
       ],
     ),
@@ -49,7 +49,7 @@ Future<void> addPost(String title, String description, BuildContext context) asy
   try {
     final url = Uri.parse("$databaseUrl/posts.json");
     String userId = await getUniversalId();
-    if(universalId != 'Sign Up/ Login to view details'){
+    if (userId != 'Sign Up/ Login to view details') {
       await http.post(
         url,
         body: jsonEncode({
@@ -61,8 +61,7 @@ Future<void> addPost(String title, String description, BuildContext context) asy
           'timestamp': DateTime.now().toIso8601String(),
         }),
       );
-    }
-    else{
+    } else {
       _showLoginAlert(context, "Please Log In to Add a Post");
     }
   } catch (e) {
@@ -77,15 +76,15 @@ Future<int> toggleLikePost(String postId, int currentLikes) async {
     bool liked = prefs.getBool('liked_$postId') ?? false; // Check if user has liked before
     final url = Uri.parse("$databaseUrl/posts/$postId.json");
 
-    int newlikes = liked ? currentLikes - 1 : currentLikes + 1;
-    
+    int newLikes = liked ? currentLikes - 1 : currentLikes + 1;
+
     await http.patch(
       url,
-      body: jsonEncode({'likes': liked ? currentLikes - 1 : currentLikes + 1}),
+      body: jsonEncode({'likes': newLikes}),
     );
 
     prefs.setBool('liked_$postId', !liked); // Toggle the like state
-    return newlikes;
+    return newLikes;
   } catch (e) {
     print("Error toggling like: $e");
     return currentLikes;
@@ -97,7 +96,7 @@ Future<void> addComment(String postId, String text, BuildContext context) async 
   try {
     final url = Uri.parse("$databaseUrl/posts/$postId/comments.json");
     String userId = await getUniversalId();
-    if(universalId != 'Sign Up/ Login to view details'){
+    if (userId != 'Sign Up/ Login to view details') {
       await http.post(
         url,
         body: jsonEncode({
@@ -106,8 +105,7 @@ Future<void> addComment(String postId, String text, BuildContext context) async 
           'timestamp': DateTime.now().toIso8601String(),
         }),
       );
-    }
-    else{
+    } else {
       _showLoginAlert(context, "Please Log In to Comment on the Post");
     }
   } catch (e) {
@@ -119,11 +117,25 @@ class CommunityForum extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Community Discussion")),
-      body: PostList(),
+      appBar: AppBar(
+        title: Text("Community Discussion", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        backgroundColor: Colors.blueAccent,
+        iconTheme: IconThemeData(color: Colors.white),
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.blue.shade100, Colors.green.shade50],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: PostList(),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showPostDialog(context),
-        child: Icon(Icons.add),
+        child: Icon(Icons.add, color: Colors.white),
+        backgroundColor: Colors.green[700],
       ),
     );
   }
@@ -136,22 +148,43 @@ class CommunityForum extends StatelessWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text("Create a Post"),
+          title: Text("Create a Post", style: TextStyle(color: Colors.blue[800])),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              TextField(controller: titleController, decoration: InputDecoration(labelText: "Title")),
-              TextField(controller: descriptionController, decoration: InputDecoration(labelText: "Description")),
+              TextField(
+                controller: titleController,
+                decoration: InputDecoration(
+                  labelText: "Title",
+                  labelStyle: TextStyle(color: Colors.blue[800]),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue[800]!),
+                  ),
+                ),
+              ),
+              TextField(
+                controller: descriptionController,
+                decoration: InputDecoration(
+                  labelText: "Description",
+                  labelStyle: TextStyle(color: Colors.blue[800]),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue[800]!),
+                  ),
+                ),
+              ),
             ],
           ),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(context), child: Text("Cancel")),
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text("Cancel", style: TextStyle(color: Colors.red)),
+            ),
             TextButton(
               onPressed: () {
                 addPost(titleController.text, descriptionController.text, context);
                 Navigator.pop(context);
               },
-              child: Text("Post"),
+              child: Text("Post", style: TextStyle(color: Colors.green[700])),
             ),
           ],
         );
@@ -165,7 +198,6 @@ class PostList extends StatefulWidget {
   _PostListState createState() => _PostListState();
 }
 
-bool reported = false;
 class _PostListState extends State<PostList> {
   List<Map<String, dynamic>> posts = [];
   Map<String, List<Map<String, dynamic>>> comments = {};
@@ -228,7 +260,7 @@ class _PostListState extends State<PostList> {
   @override
   Widget build(BuildContext context) {
     return posts.isEmpty
-        ? Center(child: CircularProgressIndicator())
+        ? Center(child: CircularProgressIndicator(color: Colors.blue[800]))
         : ListView.builder(
             itemCount: posts.length,
             itemBuilder: (context, index) {
@@ -236,82 +268,91 @@ class _PostListState extends State<PostList> {
               bool isReported = reportedPosts.contains(post['id']); // Check if reported
               return Card(
                 margin: EdgeInsets.all(10),
-                child: Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Post Title in Bold
-                      Text(
-                        post['title'],
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                      ),
-                      SizedBox(height: 5),
-                      Text(post['description']),
-                      SizedBox(height: 10),
-
-                      // Like & Comment buttons
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Expanded(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              FutureBuilder<bool>(
-                                future: _hasLikedPost(post['id']),
-                                builder: (context, snapshot) {
-                                  bool liked = snapshot.data ?? false;
-                                  return Row(
-                                    children: [
-                                      IconButton(
-                                        icon: Icon(Icons.thumb_up, color: liked ? Colors.blue : null),
-                                        onPressed: () async {
-                                          int updatedLikes = await toggleLikePost(post['id'], post['likes']);
-                                          setState(() {
-                                            posts[index]['likes'] = updatedLikes;
-                                          });
-                                        },
-                                      ),
-                                      Text("${post['likes']} Likes"),
-                                      IconButton(
-                                        onPressed: () {
-                                          setState(() {
-                                            if (isReported) {
-                                              reportedPosts.remove(post['id']); // Unmark if already reported
-                                            } else {
-                                              reportedPosts.add(post['id']); // Mark as reported
-                                            }
-                                          });
-                                        },
-                                        icon: Icon(Icons.error_outline, color: isReported ? Colors.red : null),
-                                      ),
-                                      Text("Report Misinformation", overflow: TextOverflow.ellipsis, style: TextStyle(color: isReported ? Colors.red : null)),
-                                    ],
-                                  );
-                                },
-                              ),
-                              
-                            ],
-                          ),
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Colors.blue[50]!, Colors.white],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(15),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Post Title in Bold
+                        Text(
+                          post['title'],
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.blue[800]),
                         ),
-                      ),
-                      IconButton(
-                                icon: Icon(Icons.comment),
-                                onPressed: () => _showCommentDialog(context, post['id']),
-                              ),
-                      // Display Comments
-                      if (comments.containsKey(post['id']) && comments[post['id']]!.isNotEmpty)
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        SizedBox(height: 10),
+                        Text(post['description'], style: TextStyle(color: Colors.blue[900])),
+                        SizedBox(height: 15),
+
+                        // Like & Comment buttons
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text("Comments", style: TextStyle(fontWeight: FontWeight.bold)),
-                            ...comments[post['id']]!.map((comment) => Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 2),
-                                  child: Text("${comment['userId']}: ${comment['text']}"),
-                                )),
+                            FutureBuilder<bool>(
+                              future: _hasLikedPost(post['id']),
+                              builder: (context, snapshot) {
+                                bool liked = snapshot.data ?? false;
+                                return Row(
+                                  children: [
+                                    IconButton(
+                                      icon: Icon(Icons.thumb_up, color: liked ? Colors.blue[800] : Colors.grey),
+                                      onPressed: () async {
+                                        int updatedLikes = await toggleLikePost(post['id'], post['likes']);
+                                        setState(() {
+                                          posts[index]['likes'] = updatedLikes;
+                                        });
+                                      },
+                                    ),
+                                    Text("${post['likes']} Likes", style: TextStyle(color: Colors.blue[800])),
+                                  ],
+                                );
+                              },
+                            ),
+                            IconButton(
+                              icon: Icon(Icons.comment, color: Colors.green[700]),
+                              onPressed: () => _showCommentDialog(context, post['id']),
+                            ),
+                            IconButton(
+                              icon: Icon(Icons.error_outline, color: isReported ? Colors.red : Colors.grey),
+                              onPressed: () {
+                                setState(() {
+                                  if (isReported) {
+                                    reportedPosts.remove(post['id']); // Unmark if already reported
+                                  } else {
+                                    reportedPosts.add(post['id']); // Mark as reported
+                                  }
+                                });
+                              },
+                            ),
                           ],
                         ),
-                    ],
+
+                        // Display Comments
+                        if (comments.containsKey(post['id']) && comments[post['id']]!.isNotEmpty)
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Divider(color: Colors.blue[800]),
+                              Text("Comments", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue[800])),
+                              ...comments[post['id']]!.map((comment) => Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 5),
+                                    child: Text("${comment['userId']}: ${comment['text']}", style: TextStyle(color: Colors.blue[900])),
+                                  )),
+                            ],
+                          ),
+                      ],
+                    ),
                   ),
                 ),
               );
@@ -331,16 +372,28 @@ class _PostListState extends State<PostList> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text("Add Comment"),
-          content: TextField(controller: commentController, decoration: InputDecoration(labelText: "Comment")),
+          title: Text("Add Comment", style: TextStyle(color: Colors.blue[800])),
+          content: TextField(
+            controller: commentController,
+            decoration: InputDecoration(
+              labelText: "Comment",
+              labelStyle: TextStyle(color: Colors.blue[800]),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.blue[800]!),
+              ),
+            ),
+          ),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(context), child: Text("Cancel")),
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text("Cancel", style: TextStyle(color: Colors.red)),
+            ),
             TextButton(
               onPressed: () {
                 addComment(postId, commentController.text, context);
                 Navigator.pop(context);
               },
-              child: Text("Comment"),
+              child: Text("Comment", style: TextStyle(color: Colors.green[700])),
             ),
           ],
         );
